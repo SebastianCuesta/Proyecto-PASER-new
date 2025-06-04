@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 
 const AdminEditUserModal = ({ selectedUser, onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
-    nombres: "",
+    nombress: "",
     apellidos: "",
     tipoIdentificacion: "CC",
     identificacion: "",
@@ -23,7 +23,7 @@ const AdminEditUserModal = ({ selectedUser, onClose, onSuccess }) => {
       setFormData({ ...rest, password: "" });
     } else {
       setFormData({
-        nombres: "",
+        nombress: "",
         apellidos: "",
         tipoIdentificacion: "CC",
         identificacion: "",
@@ -80,8 +80,8 @@ const AdminEditUserModal = ({ selectedUser, onClose, onSuccess }) => {
         </h2>
 
         <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
-          <input type="text" name="nombres" placeholder="nombres"
-            value={formData.nombres} onChange={handleChange}
+          <input type="text" name="nombress" placeholder="nombress"
+            value={formData.nombress} onChange={handleChange}
             className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-red-400 outline-none"
           />
           <input type="text" name="apellidos" placeholder="Apellidos"

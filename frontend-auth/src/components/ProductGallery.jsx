@@ -64,10 +64,10 @@ const ProductGallery = () => {
             >
               <img
                 src={`http://localhost:5000/uploads/${p.imagen}`}
-                alt={p.nombre}
+                alt={p.nombres}
                 className="w-full h-48 object-cover rounded"
               />
-              <h3 className="text-xl font-semibold mt-4">{p.nombre}</h3>
+              <h3 className="text-xl font-semibold mt-4">{p.nombres}</h3>
               <p className="text-gray-600">Cantidad: {p.cantidad}</p>
               <p className="text-green-600 font-bold text-lg">${p.valor}</p>
             </div>

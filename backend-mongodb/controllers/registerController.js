@@ -4,7 +4,7 @@ import { sendEmail } from '../utils/sendEmail.js';
 
 export const register = async (req, res) => {
   const {
-    nombres,
+    nombress,
     apellidos,
     tipoIdentificacion,
     identificacion,
@@ -19,7 +19,7 @@ export const register = async (req, res) => {
 
   // Validación de campos requeridos
   if (
-    !nombres || !apellidos || !tipoIdentificacion || !identificacion ||
+    !nombress || !apellidos || !tipoIdentificacion || !identificacion ||
     !numTelefono || !correo || !programaFormacion || !numeroFicha || !password
   ) {
     return res.status(400).json({ message: 'Todos los campos obligatorios deben estar completos' });
@@ -34,7 +34,7 @@ export const register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = new User({
-      nombres,
+      nombress,
       apellidos,
       tipoIdentificacion,
       identificacion,
@@ -51,7 +51,7 @@ export const register = async (req, res) => {
 
     // Enviar correo de bienvenida
     const html = `
-      <h2>¡Bienvenido a la plataforma, ${nombres}!</h2>
+      <h2>¡Bienvenido a la plataforma, ${nombress}!</h2>
       <p>Tu cuenta ha sido creada exitosamente con el correo <strong>${correo}</strong>.</p>
       <p>Gracias por confiar en nosotros.</p>
     `;
@@ -60,7 +60,7 @@ export const register = async (req, res) => {
     // Retornar datos seguros
     const userWithoutPassword = {
       _id: newUser._id,
-      nombres: newUser.nombres,
+      nombress: newUser.nombress,
       apellidos: newUser.apellidos,
       correo: newUser.correo,
       rol: newUser.rol,

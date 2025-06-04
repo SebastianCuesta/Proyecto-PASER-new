@@ -119,7 +119,7 @@ const handleCreateProduct = async () => {
   }, []);
 
   const filteredProducts = productos.filter((p) =>
-    p.nombre.toLowerCase().includes(search.toLowerCase())
+    p.nombres.toLowerCase().includes(search.toLowerCase())
   );
 
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);

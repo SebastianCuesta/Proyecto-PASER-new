@@ -32,7 +32,7 @@ const AdminUserTable = ({
         <table className="min-w-[700px] w-full text-sm text-left border-separate border-spacing-y-2">
           <thead className="text-xs text-white uppercase bg-red-500 rounded">
             <tr>
-              <th className="px-4 py-3 rounded-l-md">Nombre</th>
+              <th className="px-4 py-3 rounded-l-md">nombres</th>
               <th className="px-4 py-3">Correo</th>
               <th className="px-4 py-3">Rol</th>
               <th className="px-4 py-3 text-center rounded-r-md">Acciones</th>
@@ -45,7 +45,7 @@ const AdminUserTable = ({
                 className="bg-gray-50 hover:bg-red-50 rounded transition"
               >
                 <td className="px-4 py-3 font-medium text-gray-900">
-                  {u.nombres}
+                  {u.nombre}
                 </td>
                 <td className="px-4 py-3 text-gray-700">{u.correo}</td>
                 <td className="px-4 py-3 capitalize text-gray-700">{u.rol}</td>

@@ -10,10 +10,10 @@ const ProductModal = ({ product, onClose }) => {
       >
         <img
           src={`http://localhost:5000/uploads/${product.imagen}`}
-          alt={product.nombre}
+          alt={product.nombres}
           className="w-full h-60 object-cover rounded mb-4"
         />
-        <h2 className="text-2xl font-bold mb-2">{product.nombre}</h2>
+        <h2 className="text-2xl font-bold mb-2">{product.nombres}</h2>
         <p className="text-gray-700 mb-2">Cantidad disponible: {product.cantidad}</p>
         <p className="text-green-700 font-bold text-xl mb-4">${product.valor}</p>
         <div className="flex justify-end space-x-3">
