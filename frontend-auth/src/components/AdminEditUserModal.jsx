@@ -1,7 +1,75 @@
 // src/components/AdminEditUserModal.js
-import React from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
 
-const AdminEditUserModal = ({ selectedUser, onClose, onChange, onSave }) => {
+const AdminEditUserModal = ({ selectedUser, onClose, onChange, onSave,  }) => {
+
+  const [formData, setFormData] = useState({
+    nombres: "",
+    apellidos: "",
+    tipoIdentificacion: "CC",
+    identificacion: "",
+    numTelefono: "",
+    correo: "",
+    programaFormacion: "",
+    numeroFicha: "",
+    jornada: "Mañana",
+    password: "",
+    rol: "user",
+  });
+
+  useEffect(() => {
+    if (selectedUser) {
+      const { password, ...rest } = selectedUser;
+      setFormData({ ...rest, password: "" });
+    } else {
+      setFormData({
+        nombres: "",
+        apellidos: "",
+        tipoIdentificacion: "CC",
+        identificacion: "",
+        numTelefono: "",
+        correo: "",
+        programaFormacion: "",
+        numeroFicha: "",
+        jornada: "Mañana",
+        password: "",
+        rol: "user",
+      });
+    }
+  }, [selectedUser]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async () => {
+    try {
+      if (selectedUser) {
+        const res = await axios.put(
+          `http://localhost:5000/api/users/${selectedUser._id}`,
+          formData
+        );
+        onSuccess(res.data.user);
+        toast.success("Usuario actualizado correctamente");
+      } else {
+        const res = await axios.post(
+          "http://localhost:5000/api/register",
+          formData
+        );
+        onSuccess(res.data.user);
+        toast.success("Usuario creado correctamente");
+      }
+    } catch (error) {
+      console.error("Error al guardar usuario:", error);
+      toast.error("Ocurrió un error al guardar el usuario");
+    }
+  };
+
+  //NUEVO
+
   if (!selectedUser) return null;
 
   return (
@@ -20,13 +88,46 @@ const AdminEditUserModal = ({ selectedUser, onClose, onChange, onSave }) => {
         <div className="space-y-4">
           <input
             type="text"
-            value={selectedUser.nombre}
+            value={selectedUser.nombres}
             onChange={(e) =>
-              onChange({ ...selectedUser, nombre: e.target.value })
+              onChange({ ...selectedUser, nombres: e.target.value })
             }
             placeholder="Nombre"
             className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-green-200 focus:border-green-600 outline-none"
           />
+          
+          <input
+            type="text"
+            value={selectedUser.apellidos}
+            onChange={(e) =>
+              onChange({ ...selectedUser, apellidos: e.target.value })
+            }
+            placeholder="Apellidos"
+            className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-green-200 focus:border-green-600 outline-none"
+          />
+          
+          <select name="tipoIdentificacion" id="" value={formData.tipoIdentificacion}
+            onChange={(e) =>
+              onChange({ ...selectedUser, tipoIdentificacion: e.target.value })
+            }
+            className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-red-400 outline-none" 
+            >
+            <option value="CC">Cédula de ciudadanía</option>
+            <option value="TI">Tarjeta de identidad</option>
+            <option value="PPT">Permiso por Protección Temporal</option>
+            <option value="CE">Cédula de extranjería</option>
+          </select>
+
+            <input
+            type="number"
+            value={selectedUser.identificacion}
+            onChange={(e) =>
+              onChange({ ...selectedUser, apellidos: e.target.value })
+            }
+            placeholder="Apellidos"
+            className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-green-200 focus:border-green-600 outline-none"
+          />
+
           <input
             type="email"
             value={selectedUser.correo}

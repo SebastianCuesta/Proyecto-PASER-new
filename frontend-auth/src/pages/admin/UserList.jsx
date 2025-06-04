@@ -76,7 +76,7 @@ const UserList = () => {
 
   const filtered = usuarios.filter(
     (u) =>
-      u.nombre.toLowerCase().includes(search.toLowerCase()) ||
+      u.nombres.toLowerCase().includes(search.toLowerCase()) ||
       u.correo.toLowerCase().includes(search.toLowerCase())
   );
   const totalPages = Math.ceil(filtered.length / itemsPerPage);

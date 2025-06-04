@@ -1,9 +1,27 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
-  {
-    nombre: {
+
+{
+    nombres: {
       type: String,
+      required: true,
+    },
+    apellidos: {
+      type: String,
+      required: true,
+    },
+    tipoIdentificacion: {
+      enum: ["CC", "TI", "PPT", "CE"],
+      type: String,
+      required: true,
+    },
+    identificacion: {
+      type: Number,
+      required: true,
+    },
+    numTelefono: {
+      type: Number,
       required: true,
     },
     correo: {
@@ -11,14 +29,26 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    programaFormacion: {
+      type: String,
+      required: true,
+    },
+    numeroFicha: {
+      type: Number,
+      required: true,
+    },
+    jornada: {
+      type: String,
+      enum: ["Mañana", "Tarde", "Noche"],
+    },
     password: {
       type: String,
       required: true,
     },
     rol: {
       type: String,
-      enum: ["admin", "pasante"],
-      default: "pasante",
+      enum: ["admin", "user"],
+      default: "user",
     },
     resetPasswordToken: String,
     resetPasswordExpires: Date,

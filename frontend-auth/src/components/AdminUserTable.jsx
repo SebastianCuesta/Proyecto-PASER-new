@@ -4,6 +4,7 @@ import { FaUsers, FaSearch } from "react-icons/fa";
 
 const AdminUserTable = ({
   usuarios,
+  onCreate,
   onEdit,
   onDelete,
   searchTerm,
@@ -14,9 +15,16 @@ const AdminUserTable = ({
 }) => {
   return (
     <div className="bg-white p-6 rounded-xl shadow-md w-full max-w-5xl mx-auto mt-6">
-      <h2 className="text-2xl font-bold text-green-700 mb-6 text-center flex items-center justify-center gap-2">
-        <FaUsers /> Lista de Usuarios
-      </h2>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-green-700 mb-6 text-center flex items-center justify-center gap-2">
+          <FaUsers /> Lista de Usuarios
+        </h2>
+        <button
+            onClick={onCreate}
+            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+            + Nuevo Usuario
+        </button>
+      </div>
 
       <div className="relative max-w-sm mx-auto mb-6">
         <FaSearch className="absolute left-3 top-3 text-gray-400" />
@@ -46,7 +54,7 @@ const AdminUserTable = ({
                 className="bg-gray-50 hover:bg-green-50 rounded transition"
               >
                 <td className="px-4 py-3 font-medium text-gray-900">
-                  {u.nombre}
+                  {u.nombres}
                 </td>
                 <td className="px-4 py-3 text-gray-700">{u.correo}</td>
                 <td className="px-4 py-3 capitalize text-gray-700">{u.rol}</td>
