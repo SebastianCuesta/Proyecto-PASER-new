@@ -2,9 +2,9 @@ import mongoose from "mongoose";
 
 const productSchema = new mongoose.Schema(
   {
-    nombre: { type: String, required: true },
+    nombres: { type: String, required: true },
     cantidad: { type: Number, required: true },
-    valor: { type: Number, required: true},
+    valor: { type: Number, required: true },
     imagen: { type: String },
   },
   { timestamps: true }

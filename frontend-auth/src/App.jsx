@@ -1,34 +1,26 @@
-// src/App.jsx
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// Páginas públicas
+// Tus imports
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import Register from "./pages/Register";
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
-import NotFound from "./pages/NotFound";
-
-// Páginas de usuario/pasante
 import Dashboard from "./pages/Dashboard";
-import Prestamos from "./pages/admin/Prestamos"; // o muévelo a pages/user
-
-// Páginas de administrador
+import AdminLayout from "./components/AdminLayout";
+import AdminRoute from "./components/AdminRoute";
+import PrivateRoute from "./components/PrivateRoute";
 import Usuarios from "./pages/admin/UserList";
 import Productos from "./pages/admin/Productos";
+import Reportes from "./pages/admin/Reportes";
 import AdminWelcome from "./components/Welcome";
+import NotFound from "./pages/NotFound";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
-// Layouts y rutas protegidas
-import UserLayout from "./components/UserLayout";
-import AdminLayout from "./components/AdminLayout";
-import PrivateRoute from "./components/PrivateRoute";
-import AdminRoute from "./components/AdminRoute";
 
 const App = () => {
   const user = JSON.parse(localStorage.getItem("user"));
+
   const onLogout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
@@ -38,27 +30,23 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        {/* Rutas públicas */}
+        {/* públicas */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
 
-        {/* Layout para usuario/pasante */}
+        {/* dashboard único */}
         <Route
-          path="/"
+          path="/dashboard"
           element={
             <PrivateRoute>
-              <UserLayout user={user} onLogout={onLogout} />
+              <Dashboard />
             </PrivateRoute>
           }
-        >
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="prestamos" element={<Prestamos />} />
-        </Route>
+        />
 
-        {/* Layout para admin */}
+        {/* rutas protegidas del panel admin */}
         <Route
           path="/admin"
           element={
@@ -67,25 +55,26 @@ const App = () => {
             </AdminRoute>
           }
         >
-          {/* index equivale a /admin */}
           <Route index element={<AdminWelcome user={user} />} />
           <Route path="usuarios" element={<Usuarios />} />
           <Route path="productos" element={<Productos />} />
-          <Route path="prestamos" element={<Prestamos />} />
+          <Route path="reportes" element={<Reportes />} />
         </Route>
 
-        {/* 404 */}
+        {/* ruta no válida */}
         <Route path="*" element={<NotFound />} />
       </Routes>
 
+      {/* Toastify container global */}
       <ToastContainer
         position="top-right"
         autoClose={3000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
-        pauseOnHover
+        pauseOnFocusLoss
         draggable
+        pauseOnHover
         theme="colored"
       />
     </Router>

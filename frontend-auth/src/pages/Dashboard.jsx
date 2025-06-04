@@ -25,8 +25,9 @@ const Dashboard = () => {
   if (!user) return null;
 
   return (
+    <AdminLayout user={user} onLogout={handleLogout}>
       <Welcome user={user} />
-    
+    </AdminLayout>
   );
 };
 

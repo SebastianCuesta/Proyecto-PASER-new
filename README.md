@@ -1,152 +1,190 @@
-# SIGS - Sistema de Inventario Granja SENA
 
-**Desarrollado por los aprendices:**
-- Vanesa Trujillo Cobo
-- David Alexis Sánchez Sánchez
-- Oscar Julián Mosquera Vanegas
+# 🧠 Proyecto Base Full Stack MERN: Autenticación, Gestión de Usuarios y Productos
 
-**Supervisado por Instructor:** Héctor David Toledo García
+Este proyecto es una **plantilla funcional avanzada** que integra un **frontend en React + Vite** con un **backend en Node.js + Express + MongoDB** para implementar:
 
-SIGS es una plantilla Full Stack MERN (React + Vite, Node.js + Express, MongoDB) diseñada para la gestión de inventario y préstamos digitales en la granja del SENA. Incluye:
+- Autenticación de usuarios con JWT.
+- Gestión y CRUD de usuarios desde un panel administrativo.
+- Recuperación de contraseña por correo electrónico.
+- CRUD de productos con carga de imágenes.
+- Visualización de productos en la página principal.
+- Modal de producto con detalles y opción de compra.
+- Scroll infinito para navegación de productos.
+- Scripts unificados de desarrollo con `concurrently`.
 
-- **Autenticación JWT** (login/registro) con recuperación de contraseña por correo.
-- **Roles**: Administrador y Pasante/Aprendiz con layouts y rutas protegidas.
-- **CRUD Usuarios** en panel administrativo.
-- **CRUD Productos** con carga y vista previa de imágenes.
-- **Gestión de Préstamos**: registro, devolución y seguimiento.
-- **Interfaz responsiva** con TailwindCSS y paleta institucional SENA.
+Ideal como base para dashboards administrativos, catálogos de productos o aplicaciones e-commerce básicas.
 
 ---
 
-## 📂 Estructura del Proyecto
+## 🗂 Estructura general del proyecto
 
 ```
-root/
-├── backend/             # API REST en Node.js + Express
+.
+├── backend-mongodb/
 │   ├── controllers/
 │   ├── models/
 │   ├── routes/
 │   ├── config/
 │   └── server.js
-└── frontend/            # SPA en React + Vite + TailwindCSS
-    ├── public/assets/   # Logos e imágenes (logogreen.png, react-logo.png)
-    └── src/
-        ├── components/
-        ├── layouts/     # AdminLayout, UserLayout
-        ├── pages/
-        ├── App.jsx
-        └── main.jsx
+│
+└── frontend-auth/
+    ├── src/
+    │   ├── pages/
+    │   ├── components/
+    │   ├── layouts/
+    │   ├── App.jsx
+    │   └── main.jsx
 ```
 
 ---
 
-## ⚙️ Instalación y Ejecución
+## ✅ Frontend (React + Vite + TailwindCSS)
 
-1. **Clonar repositorio**
-   ```bash
-   git clone git@github.com:VANESSATCV/S.I.G.S.git
-   cd s.i.g.s
-   ```
-
-2. **Instalar dependencias** (en cada carpeta)
-   ```bash
-   # En la raíz (si usas concurrently)
-   npm install
-
-   # Backend
-   cd backend
-   npm install
-
-   # Frontend
-   cd ../frontend
-   npm install
-   ```
-
-3. **Variables de entorno**
-   - **backend/.env**:
-     ```env
-     PORT=5000
-     MONGODB_URI=mongodb://localhost:27017/sigs
-     JWT_SECRET=tu_clave_secreta
-     EMAIL_USER=tu_correo@gmail.com
-     EMAIL_APP_PASS=tu_app_password
-     ```
-   - **frontend/.env**:
-     ```env
-     VITE_API_URL=http://localhost:5000/api
-     ```
-
-4. **Ejecutar servicios en la raiz del proyecto**
-   ```bash
-   # Raiz
-   npm run dev
-
-   ```
-
-5. Abrir en el navegador `http://localhost:5173`
+- Login, Registro y Recuperación de contraseña con validación.
+- Redirección dinámica según rol (`admin` / `user`).
+- Layout dinámico para cada tipo de usuario.
+- Dashboard administrativo con CRUD de usuarios y productos.
+- Modal para crear/editar productos con vista previa de imagen.
+- Galería de productos en Home con scroll infinito.
+- Modal para ver detalles del producto y comprar.
+- Protección de rutas mediante `PrivateRoute` y `AdminRoute`.
 
 ---
 
-## 🚀 Características
+## ✅ Backend (Node.js + Express + MongoDB)
 
-- **Autenticación y roles**: Admin/Aprendiz con rutas protegidas.
-- **CRUD Usuarios y Productos**: con modales, validación y notificaciones.
-- **Préstamos**: gestión completa desde dashboard.
-- **Recuperación de contraseña**: envío de link, formulario de reseteo.
-- **UI/UX**: responsive, paleta institucional verde/blanco.
-- **Feedback**: alertas con React Toastify y diálogos con SweetAlert2.
+- Endpoints RESTful para login, registro y CRUD de usuarios/productos.
+- Autenticación segura con JWT.
+- Encriptación de contraseñas con `bcrypt`.
+- Verificación por correo para recuperación de contraseña.
+- Subida de imágenes de productos con `multer`.
+- Controladores separados para usuarios y productos.
+- Middleware para validación de tokens y roles.
 
 ---
 
-## 📋 API Endpoints Principales
+## 🖼 Capturas de pantalla
+
+A continuación, algunas vistas de la aplicación:
+
+1. **Pantalla de Home**
+   ![Login](./img/001.png)
+
+2. **Prudctos Modal**
+   ![Register](./img/002.png)
+
+3. **Login**
+   ![Dashboard Admin](./img/003.png)
+
+4. **Recuperar Contraseña**
+   ![Productos](./img/004.png)
+
+5. **Registro**
+   ![Galería](./img/005.png)
+
+6. **Dashboard ADMIN**
+   ![Modal Producto](./img/006.png)
+
+7. **Productos Admin**
+   ![Reset Password](./img/007.png)
+
+8. **Edicion de Productos**
+   ![Usuarios](./img/008.png)
+
+9. **Mobile View**
+   ![Editar Producto](./img/009.png)
+
+10. **Mobile View**
+    ![Responsive](./img/010.png)
+
+
+---
+
+## 🧪 ¿Cómo correr el proyecto?
+
+### 1. Clonar el repositorio
+
+```bash
+git clone https://github.com/hdtoledo/mern-template.git
+cd mern-template
+```
+
+### 2. Instalar dependencias del backend y frontend
+
+```bash
+npm install
+```
+
+### 3. Variables de entorno
+
+### 📧 Configuración de envío de correos (Gmail)
+
+Este proyecto utiliza **Gmail con clave de aplicación** para el envío de correos electrónicos (por ejemplo, confirmación de cuenta o recuperación de contraseña). Para que funcione correctamente:
+
+1. Accede a tu cuenta de Gmail.
+2. Activa la **verificación en dos pasos**.
+3. Ve a [https://myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords).
+4. Genera una nueva **clave de aplicación** (elige "Correo" y "Otro").
+5. Copia la clave generada (16 caracteres) y úsala como valor de `EMAIL_APP_PASS`.
+
+#### Backend (`backend-mongodb/.env`)
+
+```env
+PORT=5000
+MONGO_URI=mongodb://localhost:27017/mern_auth_products
+JWT_SECRET=tu_clave_secreta
+EMAIL_USER=tu_correo@gmail.com
+EMAIL_APP_PASS=tu_contraseña_app
+```
+
+---
+
+## 🧰 Endpoints principales
 
 ### Autenticación
-| Método | Ruta                          | Descripción                          |
-|--------|-------------------------------|--------------------------------------|
-| POST   | `/api/register`               | Registro de usuario                  |
-| POST   | `/api/login`                  | Inicio de sesión                     |
-| POST   | `/api/forgot-password`        | Solicitar link de recuperación       |
-| POST   | `/api/reset-password/:token`  | Restablecer contraseña               |
+| Método | Ruta                 | Descripción                        |
+|--------|----------------------|------------------------------------|
+| POST   | `/api/register`      | Registro de usuario                |
+| POST   | `/api/login`         | Inicio de sesión                   |
+| POST   | `/api/forgot-password` | Enviar link para reset de clave  |
+| POST   | `/api/reset-password/:token` | Restablecer contraseña       |
 
-### Usuarios (Admin)
-| Método | Ruta                   | Descripción            |
-|--------|------------------------|------------------------|
-| GET    | `/api/users`           | Listar usuarios        |
-| PUT    | `/api/users/:id`       | Actualizar usuario     |
-| DELETE | `/api/users/:id`       | Eliminar usuario       |
+### Usuarios
+| Método | Ruta             | Descripción                    |
+|--------|------------------|--------------------------------|
+| GET    | `/api/users`     | Listar usuarios                |
+| PUT    | `/api/users/:id` | Actualizar usuario             |
+| DELETE | `/api/users/:id` | Eliminar usuario               |
 
-### Productos (Admin)
-| Método | Ruta                       | Descripción           |
-|--------|----------------------------|-----------------------|
-| GET    | `/api/productos`           | Listar productos      |
-| POST   | `/api/productos`           | Crear producto        |
-| PUT    | `/api/productos/:id`       | Editar producto       |
-| DELETE | `/api/productos/:id`       | Eliminar producto     |
-
-### Préstamos
-| Método | Ruta                          | Descripción                     |
-|--------|-------------------------------|---------------------------------|
-| GET    | `/api/prestamos`              | Listar préstamos (Admin)        |
-| POST   | `/api/prestamos`              | Crear préstamo                  |
-| PUT    | `/api/prestamos/:id/devolver` | Marcar devolución               |
+### Productos
+| Método | Ruta                     | Descripción                   |
+|--------|--------------------------|-------------------------------|
+| GET    | `/api/productos`         | Listar productos              |
+| POST   | `/api/productos`         | Crear producto                |
+| PUT    | `/api/productos/:id`     | Editar producto               |
+| DELETE | `/api/productos/:id`     | Eliminar producto             |
 
 ---
 
-## 📸 Capturas de Pantalla
-![Home](./img/001.jpg)
+## 🧠 Características técnicas adicionales
+
+- ✉️ Notificaciones por correo para registro y recuperación.
+- 🖼 Vista previa de imagen antes de subir.
+- 🔁 Scroll infinito para productos.
+- 💾 Almacenamiento local de imágenes.
+- 🧩 Componentes desacoplados y reutilizables.
+- 🔒 Middleware personalizado para roles.
 
 ---
 
-## 🤝 Contribuciones
+## 🤝 Créditos
 
-1. Haz fork de este repositorio.
-2. Crea rama: `git checkout -b feature/tu-feature`.
-3. Realiza cambios y `git commit -m "feat: descripción"`.
-4. `git push origin feature/tu-feature`.
-5. Abre un Pull Request.
+Desarrollado por [@hdtoledo](https://github.com/hdtoledo)
+
+🚀 Proyecto educativo libre para modificación, mejora y aprendizaje.
 
 ---
 
-## 📄 Licencia
+## 📝 Licencia
 
-MIT © 2025 SENA
+Este proyecto se entrega bajo la licencia MIT. Puedes modificarlo, distribuirlo y adaptarlo a tus necesidades. (2025)

@@ -1,11 +1,18 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { FaTimes, FaUser, FaBox, FaDashcube } from "react-icons/fa";
-import senaLogo from "../assets/logowhite.png";
+import {
+  FaTimes,
+  FaUser,
+  FaBox,
+  FaChartBar,
+  FaCog,
+  FaDashcube,
+} from "react-icons/fa";
 
 const Sidebar = ({ user: propUser, onLogout, menuOpen, setMenuOpen }) => {
   const [user, setUser] = useState(propUser || null);
 
+  // Sincroniza con localStorage en caso de recarga o delay de props
   useEffect(() => {
     if (!propUser) {
       const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -19,14 +26,14 @@ const Sidebar = ({ user: propUser, onLogout, menuOpen, setMenuOpen }) => {
 
   const adminItems = [
     { name: "Dashboard", icon: <FaDashcube />, path: "/dashboard" },
-    { name: "Usuarios",   icon: <FaUser />,     path: "/admin/usuarios" },
-    { name: "Productos",  icon: <FaBox />,      path: "/admin/productos" },
-    { name: "Préstamos",  icon: <FaBox />,      path: "/admin/prestamos" },
+    { name: "Usuarios", icon: <FaUser />, path: "/admin/usuarios" },
+    { name: "Productos", icon: <FaBox />, path: "/admin/productos" },
   ];
 
   const userItems = [
     { name: "Dashboard", icon: <FaDashcube />, path: "/dashboard" },
-    { name: "Préstamos", icon: <FaBox />,      path: "/prestamos"  },
+    { name: "Perfil", icon: <FaUser />, path: "/perfil" },
+    { name: "Pedidos", icon: <FaBox />, path: "/pedidos" },
   ];
 
   const menuItems = isAdmin ? adminItems : userItems;
@@ -35,7 +42,7 @@ const Sidebar = ({ user: propUser, onLogout, menuOpen, setMenuOpen }) => {
     <>
       {menuOpen && (
         <div
-          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-10 md:hidden"
+          className="fixed inset-0 bg-gradient-to-br from-white/60 via-blue-100/40 to-transparent backdrop-blur-sm z-10 md:hidden"
           onClick={() => setMenuOpen(false)}
         />
       )}
@@ -43,44 +50,53 @@ const Sidebar = ({ user: propUser, onLogout, menuOpen, setMenuOpen }) => {
       <div
         className={`bg-white w-64 shadow-lg fixed md:relative z-20 transition-transform duration-300 md:translate-x-0 ${
           menuOpen ? "translate-x-0" : "-translate-x-full"
-        } md:block flex flex-col justify-start h-screen`}
+        } md:block flex flex-col justify-between min-h-screen`}
       >
-        {/* Logo y título */}
-        <div className="p-4 flex items-center justify-between bg-green-700">
-          <div className="flex items-center">
-            <img src={senaLogo} alt="SENA Logo" className="h-8 mr-2" />
-            <span className="text-white font-bold">PASER</span>
+        <div className="p-4">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold text-red-600">Panel</h2>
+            <button className="md:hidden" onClick={() => setMenuOpen(false)}>
+              <FaTimes size={20} />
+            </button>
           </div>
-          <button
-            className="md:hidden text-white"
-            onClick={() => setMenuOpen(false)}
-          >
-            <FaTimes />
-          </button>
-        </div>
 
-        {/* Contenido alineado arriba */}
-        <div className="p-4 text-left overflow-y-auto flex-1">
-          <div className="mb-6">
+          <div className="text-gray-600 mb-6">
             <p className="font-medium">Bienvenido,</p>
             <p className="font-semibold">{user?.nombres || "Usuario"}</p>
-            <p className="text-sm italic capitalize">{user?.rol || "usuario"}</p>
+            <p className="text-sm text-gray-500 italic capitalize">
+              {user?.rol || "usuario"}
+            </p>
           </div>
 
           <nav className="flex flex-col gap-3">
             <Link
               to="/"
               onClick={() => setMenuOpen(false)}
-              className="flex items-center gap-3 text-gray-700 hover:text-green-600 transition-colors p-2 rounded-md"
+              className="flex items-center gap-3 text-gray-700 hover:text-red-600 transition-colors"
             >
-              <FaDashcube /> Inicio
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3 9.75L12 4.5l9 5.25M4.5 10.5v8.25A1.5 1.5 0 006 20.25h4.5v-6h3v6H18a1.5 1.5 0 001.5-1.5V10.5"
+                />
+              </svg>
+              Inicio
             </Link>
+
             {menuItems.map((item) => (
               <Link
                 key={item.name}
                 to={item.path}
                 onClick={() => setMenuOpen(false)}
-                className="flex items-center gap-3 text-gray-700 hover:text-green-600 transition-colors p-2 rounded-md"
+                className="flex items-center gap-3 text-gray-700 hover:text-red-600 transition-colors"
               >
                 {item.icon}
                 {item.name}
@@ -89,11 +105,10 @@ const Sidebar = ({ user: propUser, onLogout, menuOpen, setMenuOpen }) => {
           </nav>
         </div>
 
-        {/* Botón de logout */}
         <div className="p-4">
           <button
             onClick={onLogout}
-            className="w-full bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
+            className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 w-full"
           >
             Cerrar sesión
           </button>

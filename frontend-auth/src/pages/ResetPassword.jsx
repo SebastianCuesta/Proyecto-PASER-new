@@ -3,7 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import senaLogo from "../assets/logogreen.png";
 
 const ResetPassword = () => {
   const { token } = useParams();
@@ -28,7 +27,10 @@ const ResetPassword = () => {
     }
 
     try {
-      await axios.post(`http://localhost:5000/api/reset-password/${token}`, { password });
+      await axios.post(`http://localhost:5000/api/reset-password/${token}`, {
+        password,
+      });
+
       toast.success("Contraseña actualizada. Inicia sesión");
       navigate("/login");
     } catch (err) {
@@ -37,15 +39,10 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center px-4">
-      <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
-        {/* Logo SENA */}
-        <div className="flex justify-center mb-6">
-          <img src={senaLogo} alt="SENA Logo" className="h-12" />
-        </div>
-        <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
-          Restablecer Contraseña
-        </h2>
+    <div className="min-h-screen flex items-center justify-center bg-blue-100 px-4">
+      <div className="max-w-md w-full bg-white p-6 rounded shadow">
+        <h2 className="text-xl font-bold mb-4 text-center">Restablecer Contraseña</h2>
+
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Nueva contraseña */}
           <div className="relative">
@@ -55,7 +52,7 @@ const ResetPassword = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-green-600 pr-10"
+              className="w-full px-4 py-2 border rounded pr-10"
             />
             <span
               onClick={() => setShowPassword(!showPassword)}
@@ -73,7 +70,7 @@ const ResetPassword = () => {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-green-600 pr-10"
+              className="w-full px-4 py-2 border rounded pr-10"
             />
             <span
               onClick={() => setShowConfirm(!showConfirm)}
@@ -83,25 +80,10 @@ const ResetPassword = () => {
             </span>
           </div>
 
-          <button
-            type="submit"
-            className="w-full bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition"
-          >
+          <button className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
             Guardar nueva contraseña
           </button>
         </form>
-        <div className="mt-6 text-center text-gray-600 space-y-2">
-          <p>
-            <a href="/login" className="text-green-600 hover:underline font-medium">
-              Iniciar Sesión
-            </a>
-          </p>
-          <p>
-            <a href="/" className="text-green-600 hover:underline font-medium">
-              Volver al inicio
-            </a>
-          </p>
-        </div>
       </div>
     </div>
   );

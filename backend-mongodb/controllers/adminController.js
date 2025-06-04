@@ -28,7 +28,7 @@ export const deleteUser = async (req, res) => {
   }
 };
 
-// ✅ Editar usuario por ID
+
 export const updateUser = async (req, res) => {
   const {
     nombres,
@@ -48,7 +48,9 @@ export const updateUser = async (req, res) => {
     const userId = req.params.id;
     const user = await User.findById(userId);
 
-    if (!user) return res.status(404).json({ message: "Usuario no encontrado" });
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
 
     // Asignar solo si se envía un nuevo valor
     user.nombres = nombres ?? user.nombres;
@@ -74,10 +76,11 @@ export const updateUser = async (req, res) => {
 
     res.json({
       message: "Usuario actualizado correctamente",
-      user: updatedUser,
+      user: userWithoutPassword,
     });
   } catch (error) {
     console.error("❌ Error al actualizar usuario:", error);
     res.status(500).json({ message: "Error al actualizar usuario" });
   }
 };
+

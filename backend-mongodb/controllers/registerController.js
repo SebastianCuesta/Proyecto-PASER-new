@@ -27,12 +27,12 @@ export const register = async (req, res) => {
 
   try {
     const existingUser = await User.findOne({ correo });
-
     if (existingUser) {
       return res.status(400).json({ message: 'El correo ya está registrado' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+
     const newUser = new User({
       nombres,
       apellidos,
@@ -51,19 +51,25 @@ export const register = async (req, res) => {
 
     // Enviar correo de bienvenida
     const html = `
-      <h2>¡Bienvenido a S.I.G.S, ${nombres}!</h2>
+      <h2>¡Bienvenido a la plataforma, ${nombres}!</h2>
       <p>Tu cuenta ha sido creada exitosamente con el correo <strong>${correo}</strong>.</p>
       <p>Gracias por confiar en nosotros.</p>
     `;
-    await sendEmail(correo, '🎉 Bienvenido S.I.G.S', html);
+    await sendEmail(correo, '🎉 Bienvenido a la plataforma', html);
 
+    // Retornar datos seguros
     const userWithoutPassword = {
       _id: newUser._id,
-      nombre: newUser.nombres,
+      nombres: newUser.nombres,
+      apellidos: newUser.apellidos,
       correo: newUser.correo,
+      rol: newUser.rol,
     };
 
-    res.status(201).json({ message: 'Usuario registrado exitosamente', user: userWithoutPassword });
+    res.status(201).json({
+      message: 'Usuario registrado exitosamente',
+      user: userWithoutPassword
+    });
   } catch (error) {
     console.error("❌ Error en el registro:", error);
     res.status(500).json({ message: 'Error en el servidor' });
