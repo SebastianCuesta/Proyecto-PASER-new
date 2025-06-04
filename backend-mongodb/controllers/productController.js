@@ -27,15 +27,15 @@ export const getProductsGallery = async (req, res) => {
 };
 
 export const createProduct = async (req, res) => {
-  const { nombres, cantidad, valor } = req.body;
+  const { nombre, cantidad, descripcion, categoria } = req.body;
   const imagen = req.file?.filename;
 
   try {
-    const nuevo = new Product({ nombres, cantidad, valor, imagen });
+    const nuevo = new Product({ nombre, cantidad, descripcion, categoria, imagen });
     await nuevo.save();
     res.status(201).json({ message: 'Producto creado correctamente', producto: nuevo });
   } catch (error) {
-    res.status(500).json({ message: 'Error al crear el producto' });
+    res.status(500).json({ message: 'Error al crear el producto', error });
   }
 };
 
@@ -57,7 +57,8 @@ export const deleteProduct = async (req, res) => {
 };
 
 export const updateProduct = async (req, res) => {
-  const { nombres, cantidad, valor } = req.body;
+  const { nombre, cantidad, descripcion, categoria } = req.body;
+
   try {
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ message: 'Producto no encontrado' });
@@ -70,13 +71,15 @@ export const updateProduct = async (req, res) => {
       product.imagen = req.file.filename;
     }
 
-    product.nombres = nombres;
+    product.nombre = nombre;
     product.cantidad = cantidad;
-    product.valor = valor;
+    product.descripcion = descripcion;
+    product.categoria = categoria;
+
     await product.save();
 
     res.json({ message: 'Producto actualizado', producto: product });
   } catch (error) {
-    res.status(500).json({ message: 'Error al actualizar producto' });
+    res.status(500).json({ message: 'Error al actualizar producto', error });
   }
 };

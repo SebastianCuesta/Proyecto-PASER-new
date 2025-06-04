@@ -28,59 +28,28 @@ export const deleteUser = async (req, res) => {
   }
 };
 
-
+// ✅ Editar usuario por ID
 export const updateUser = async (req, res) => {
-  const {
-    nombres,
-    apellidos,
-    tipoIdentificacion,
-    identificacion,
-    numTelefono,
-    correo,
-    programaFormacion,
-    numeroFicha,
-    jornada,
-    password,
-    rol,
-  } = req.body;
+  const { nombre, correo, rol } = req.body;
 
   try {
     const userId = req.params.id;
     const user = await User.findById(userId);
 
-    if (!user) {
-      return res.status(404).json({ message: "Usuario no encontrado" });
-    }
+    if (!user) return res.status(404).json({ message: "Usuario no encontrado" });
 
-    // Asignar solo si se envía un nuevo valor
-    user.nombres = nombres ?? user.nombres;
-    user.apellidos = apellidos ?? user.apellidos;
-    user.tipoIdentificacion = tipoIdentificacion ?? user.tipoIdentificacion;
-    user.identificacion = identificacion ?? user.identificacion;
-    user.numTelefono = numTelefono ?? user.numTelefono;
-    user.correo = correo ?? user.correo;
-    user.programaFormacion = programaFormacion ?? user.programaFormacion;
-    user.numeroFicha = numeroFicha ?? user.numeroFicha;
-    user.jornada = jornada ?? user.jornada;
-    user.rol = rol ?? user.rol;
-
-    if (password) {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      user.password = hashedPassword;
-    }
+    user.nombre = nombre || user.nombre;
+    user.correo = correo || user.correo;
+    user.rol = rol || user.rol;
 
     const updatedUser = await user.save();
 
-    // Enviar respuesta sin la contraseña
-    const { password: _, ...userWithoutPassword } = updatedUser.toObject();
-
     res.json({
       message: "Usuario actualizado correctamente",
-      user: userWithoutPassword,
+      user: updatedUser,
     });
   } catch (error) {
-    console.error("❌ Error al actualizar usuario:", error);
+    console.error("Error al actualizar usuario:", error);
     res.status(500).json({ message: "Error al actualizar usuario" });
   }
 };
-

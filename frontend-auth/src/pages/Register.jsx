@@ -3,12 +3,13 @@ import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast } from "react-toastify";
+import senaLogo from "../assets/logogreen.png";
 
 const Register = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    nombres: "",
+    nombre: "",
     correo: "",
     password: "",
     rol: "user",
@@ -51,31 +52,32 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-300 px-4">
-      <div className="max-w-md w-full bg-white p-8 rounded-xl shadow-md">
-        <h2 className="text-2xl font-bold text-center mb-6">Crear Cuenta PASER</h2>
-
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
+      <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
+        {/* Logo SENA */}
+        <div className="flex justify-center mb-6">
+          <img src={senaLogo} alt="SENA Logo" className="h-12" />
+        </div>
+        <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">Crear Cuenta</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
-            name="nombres"
-            placeholder="nombres completo"
-            value={formData.nombres}
+            name="nombre"
+            placeholder="Nombre completo"
+            value={formData.nombre}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-green-600"
             required
           />
-
           <input
             type="email"
             name="correo"
             placeholder="Correo electrónico"
             value={formData.correo}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-green-600"
             required
           />
-
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
@@ -83,7 +85,7 @@ const Register = () => {
               placeholder="Contraseña"
               value={formData.password}
               onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 pr-10"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-green-600 pr-10"
               required
             />
             <div
@@ -93,27 +95,25 @@ const Register = () => {
               {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
             </div>
           </div>
-
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-200"
+            className="w-full bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition"
           >
             Registrarse
           </button>
-
-          <p className="text-center text-gray-600 mt-4 text-sm">
-            ¿Ya tienes cuenta?{" "}
-            <Link to="/login" className="text-blue-600 hover:underline font-medium">
-              Inicia sesión
+        </form>
+        <div className="mt-6 text-center text-gray-600 space-y-2">
+          <p>
+            <Link to="/login" className="text-green-600 hover:underline font-medium">
+              ¿Ya tienes cuenta? Inicia sesión
             </Link>
           </p>
-
-          <p className="text-center text-gray-600 mt-2 text-sm">
-            <Link to="/" className="text-blue-600 hover:underline font-medium">
+          <p>
+            <Link to="/" className="text-green-600 hover:underline font-medium">
               Volver al inicio
             </Link>
           </p>
-        </form>
+        </div>
       </div>
     </div>
   );

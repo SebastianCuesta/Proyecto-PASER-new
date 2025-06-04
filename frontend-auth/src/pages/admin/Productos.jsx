@@ -1,9 +1,11 @@
+// src/pages/admin/Productos.js
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import AdminProductsTable from "../../components/AdminProductsTable";
 import AdminEditProductsModal from "../../components/AdminEditProductsModal";
+import senaLogo from "../../assets/logogreen.png";
 
 const Productos = () => {
   const [productos, setProductos] = useState([]);
@@ -15,17 +17,21 @@ const Productos = () => {
   const [isEditing, setIsEditing] = useState(false);
   const itemsPerPage = 5;
 
+  // Fetch productos dentro de un useEffect normal
   const fetchProductos = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/productos");
-      setProductos(res.data);
-    } catch (error) {
-      console.error("Error al obtener productos:", error);
+      const { data } = await axios.get("http://localhost:5000/api/productos");
+      setProductos(data);
+    } catch {
       toast.error("Error al obtener productos");
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchProductos();
+  }, []);
 
   const eliminarProducto = async (id) => {
     const result = await Swal.fire({
@@ -38,107 +44,111 @@ const Productos = () => {
       confirmButtonText: "Sí, eliminar",
       cancelButtonText: "Cancelar",
     });
-
     if (result.isConfirmed) {
       try {
         await axios.delete(`http://localhost:5000/api/productos/${id}`);
-        setProductos((prev) => prev.filter((p) => p._id !== id));
+        setProductos((p) => p.filter((x) => x._id !== id));
         toast.success("Producto eliminado correctamente");
-      } catch (error) {
-        console.error("Error al eliminar producto:", error);
+      } catch {
         toast.error("Error al eliminar producto");
       }
     }
   };
 
-  const openEditModal = (product) => {
-    setSelectedProduct(product);
+  const openEditModal = (p) => {
+    setSelectedProduct(p);
     setIsEditing(true);
     setShowModal(true);
   };
 
   const openCreateModal = () => {
-    setSelectedProduct({ nombres: "", cantidad: "", valor: "", imagen: null });
+    setSelectedProduct({
+      nombre: "",
+      cantidad: "",
+      descripcion: "",
+      categoria: "",
+      imagen: null,
+    });
     setIsEditing(false);
     setShowModal(true);
   };
 
   const handleSaveChanges = async () => {
-  try {
-    const formData = new FormData();
-    formData.append("nombres", selectedProduct.nombres);
-    formData.append("cantidad", selectedProduct.cantidad);
-    formData.append("valor", selectedProduct.valor);
-    if (selectedProduct.imagen instanceof File) {
-      formData.append("imagen", selectedProduct.imagen);
+    try {
+      const form = new FormData();
+      form.append("nombre", selectedProduct.nombre);
+      form.append("cantidad", selectedProduct.cantidad);
+      form.append("descripcion", selectedProduct.descripcion);
+      form.append("categoria", selectedProduct.categoria);
+      if (selectedProduct.imagen instanceof File) {
+        form.append("imagen", selectedProduct.imagen);
+      }
+      const { data } = await axios.put(
+        `http://localhost:5000/api/productos/${selectedProduct._id}`,
+        form
+      );
+      setProductos((p) =>
+        p.map((x) => (x._id === data.producto._id ? data.producto : x))
+      );
+      toast.success("Producto actualizado correctamente");
+      setShowModal(false);
+    } catch {
+      toast.error("Error al actualizar producto");
     }
+  };
 
-    const res = await axios.put(
-      `http://localhost:5000/api/productos/${selectedProduct._id}`,
-      formData
-    );
-
-    const updated = res.data.producto; // ✅ importante
-    setProductos((prev) =>
-      prev.map((p) => (p._id === updated._id ? updated : p))
-    );
-
-    toast.success("Producto actualizado correctamente");
-    setShowModal(false);
-    setSelectedProduct(null);
-  } catch (error) {
-    console.error("Error al actualizar producto:", error);
-    toast.error("Error al actualizar producto");
-  }
-};
-
-const handleCreateProduct = async () => {
-  try {
-    const formData = new FormData();
-    formData.append("nombres", selectedProduct.nombres);
-    formData.append("cantidad", selectedProduct.cantidad);
-    formData.append("valor", selectedProduct.valor);
-    if (selectedProduct.imagen instanceof File) {
-      formData.append("imagen", selectedProduct.imagen);
+  const handleCreateProduct = async () => {
+    try {
+      const form = new FormData();
+      form.append("nombre", selectedProduct.nombre);
+      form.append("cantidad", selectedProduct.cantidad);
+      form.append("descripcion", selectedProduct.descripcion);
+      form.append("categoria", selectedProduct.categoria);
+      if (selectedProduct.imagen instanceof File) {
+        form.append("imagen", selectedProduct.imagen);
+      }
+      const { data } = await axios.post(
+        "http://localhost:5000/api/productos",
+        form
+      );
+      setProductos((p) => [...p, data.producto]);
+      toast.success("Producto creado exitosamente");
+      setShowModal(false);
+    } catch {
+      toast.error("Error al crear producto");
     }
+  };
 
-    const res = await axios.post("http://localhost:5000/api/productos", formData);
-    setProductos((prev) => [...prev, res.data.producto]); // o [res.data.producto, ...prev]
-    toast.success("Producto creado exitosamente");
-    setShowModal(false);
-    setSelectedProduct(null);
-  } catch (error) {
-    console.error("Error al crear producto:", error);
-    toast.error("Error al crear producto");
-  }
-};
-
-
-  useEffect(() => {
-    fetchProductos();
-  }, []);
-
-  const filteredProducts = productos.filter((p) =>
-    p.nombres.toLowerCase().includes(search.toLowerCase())
+  const filtered = productos.filter((p) =>
+    p.nombre.toLowerCase().includes(search.toLowerCase())
   );
-
-  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
-  const paginatedProducts = filteredProducts.slice(
+  const totalPages = Math.ceil(filtered.length / itemsPerPage);
+  const paginated = filtered.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
-  if (loading)
+  if (loading) {
     return (
-      <div className="w-full flex justify-center items-center p-8">
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <p className="text-gray-500">Cargando productos...</p>
       </div>
     );
+  }
 
   return (
-    <div className="w-full px-4">
+    <div className="min-h-screen bg-gray-100 p-4">
+      {/* Cabecera */}
+      <div className="max-w-6xl mx-auto bg-white rounded-xl shadow-md p-6 mb-6 flex items-center">
+        <img src={senaLogo} alt="SENA Logo" className="h-10 mr-4" />
+        <h1 className="text-2xl font-bold text-green-700">
+          Gestión de Productos
+        </h1>
+      </div>
+
+      {/* Tabla y buscador */}
       <AdminProductsTable
-        productos={paginatedProducts}
+        productos={paginated}
         onEdit={openEditModal}
         onDelete={eliminarProducto}
         onCreate={openCreateModal}
@@ -152,13 +162,11 @@ const handleCreateProduct = async () => {
         onPageChange={setCurrentPage}
       />
 
+      {/* Modal */}
       {showModal && selectedProduct && (
         <AdminEditProductsModal
           product={selectedProduct}
-          onClose={() => {
-            setShowModal(false);
-            setSelectedProduct(null);
-          }}
+          onClose={() => setShowModal(false)}
           onChange={setSelectedProduct}
           onSave={handleSaveChanges}
           onCreate={handleCreateProduct}

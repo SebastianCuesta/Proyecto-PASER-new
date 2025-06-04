@@ -1,70 +1,8 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-import { toast } from "react-toastify";
+// src/components/AdminEditUserModal.js
+import React from "react";
 
-const AdminEditUserModal = ({ selectedUser, onClose, onSuccess }) => {
-  const [formData, setFormData] = useState({
-    nombress: "",
-    apellidos: "",
-    tipoIdentificacion: "CC",
-    identificacion: "",
-    numTelefono: "",
-    correo: "",
-    programaFormacion: "",
-    numeroFicha: "",
-    jornada: "Mañana",
-    password: "",
-    rol: "user",
-  });
-
-  useEffect(() => {
-    if (selectedUser) {
-      const { password, ...rest } = selectedUser;
-      setFormData({ ...rest, password: "" });
-    } else {
-      setFormData({
-        nombress: "",
-        apellidos: "",
-        tipoIdentificacion: "CC",
-        identificacion: "",
-        numTelefono: "",
-        correo: "",
-        programaFormacion: "",
-        numeroFicha: "",
-        jornada: "Mañana",
-        password: "",
-        rol: "user",
-      });
-    }
-  }, [selectedUser]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async () => {
-    try {
-      if (selectedUser) {
-        const res = await axios.put(
-          `http://localhost:5000/api/users/${selectedUser._id}`,
-          formData
-        );
-        onSuccess(res.data.user);
-        toast.success("Usuario actualizado correctamente");
-      } else {
-        const res = await axios.post(
-          "http://localhost:5000/api/register",
-          formData
-        );
-        onSuccess(res.data.user);
-        toast.success("Usuario creado correctamente");
-      }
-    } catch (error) {
-      console.error("Error al guardar usuario:", error);
-      toast.error("Ocurrió un error al guardar el usuario");
-    }
-  };
+const AdminEditUserModal = ({ selectedUser, onClose, onChange, onSave }) => {
+  if (!selectedUser) return null;
 
   return (
     <div
@@ -72,83 +10,57 @@ const AdminEditUserModal = ({ selectedUser, onClose, onSuccess }) => {
       onClick={onClose}
     >
       <div
-        className="bg-white p-6 rounded-xl shadow-2xl w-full max-w-md"
+        className="bg-white p-6 rounded-xl shadow-2xl w-full max-w-md animate-fade-in transition-all"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-2xl font-bold mb-6 text-center text-red-600">
-          {selectedUser ? "Editar Usuario" : "Crear Usuario"}
+        <h2 className="text-2xl font-bold mb-6 text-center text-green-700">
+          Editar Usuario
         </h2>
 
-        <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
-          <input type="text" name="nombress" placeholder="nombress"
-            value={formData.nombress} onChange={handleChange}
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-red-400 outline-none"
+        <div className="space-y-4">
+          <input
+            type="text"
+            value={selectedUser.nombre}
+            onChange={(e) =>
+              onChange({ ...selectedUser, nombre: e.target.value })
+            }
+            placeholder="Nombre"
+            className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-green-200 focus:border-green-600 outline-none"
           />
-          <input type="text" name="apellidos" placeholder="Apellidos"
-            value={formData.apellidos} onChange={handleChange}
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-red-400 outline-none"
+          <input
+            type="email"
+            value={selectedUser.correo}
+            onChange={(e) =>
+              onChange({ ...selectedUser, correo: e.target.value })
+            }
+            placeholder="Correo"
+            className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-green-200 focus:border-green-600 outline-none"
           />
-          <select name="tipoIdentificacion" value={formData.tipoIdentificacion}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-red-400 outline-none"
-          >
-            <option value="CC">Cédula de ciudadanía</option>
-            <option value="TI">Tarjeta de identidad</option>
-            <option value="PPT">Permiso por Protección Temporal</option>
-            <option value="CE">Cédula de extranjería</option>
-          </select>
-          <input type="number" name="identificacion" placeholder="Identificación"
-            value={formData.identificacion} onChange={handleChange}
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-red-400 outline-none"
-          />
-          <input type="number" name="numTelefono" placeholder="Teléfono"
-            value={formData.numTelefono} onChange={handleChange}
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-red-400 outline-none"
-          />
-          <input type="email" name="correo" placeholder="Correo"
-            value={formData.correo} onChange={handleChange}
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-red-400 outline-none"
-          />
-          <input type="text" name="programaFormacion" placeholder="Programa de formación"
-            value={formData.programaFormacion} onChange={handleChange}
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-red-400 outline-none"
-          />
-          <input type="number" name="numeroFicha" placeholder="Número de ficha"
-            value={formData.numeroFicha} onChange={handleChange}
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-red-400 outline-none"
-          />
-          <select name="jornada" value={formData.jornada}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-red-400 outline-none"
-          >
-            <option value="Mañana">Mañana</option>
-            <option value="Tarde">Tarde</option>
-            <option value="Noche">Noche</option>
-          </select>
-          {!selectedUser && (
-            <input type="password" name="password" placeholder="Contraseña"
-              value={formData.password} onChange={handleChange}
-              className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-red-400 outline-none"
-            />
-          )}
-          <select name="rol" value={formData.rol} onChange={handleChange}
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-red-400 outline-none"
+          <select
+            value={selectedUser.rol}
+            onChange={(e) =>
+              onChange({ ...selectedUser, rol: e.target.value })
+            }
+            className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-green-200 focus:border-green-600 outline-none"
           >
             <option value="user">Usuario</option>
             <option value="admin">Administrador</option>
+            <option value="pasante">Pasante</option>
           </select>
         </div>
 
         <div className="mt-6 flex justify-end space-x-3">
-          <button onClick={onClose}
+          <button
+            onClick={onClose}
             className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition"
           >
             Cancelar
           </button>
-          <button onClick={handleSubmit}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+          <button
+            onClick={onSave}
+            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
           >
-            {selectedUser ? "Guardar Cambios" : "Crear Usuario"}
+            Guardar Cambios
           </button>
         </div>
       </div>
